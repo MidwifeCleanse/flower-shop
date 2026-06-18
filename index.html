@@ -1,266 +1,267 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Flower Shop — Витрина</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 Магия Цветов — Каталог</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background-color: #fff9fa; color: #333; }
+        header { background-color: #d63384; color: white; text-align: center; padding: 20px 10px; }
+        h1 { margin: 0; font-size: 24px; }
+        .container { max-width: 800px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
+        
+        /* Выбор города */
+        .city-box { background: white; border: 1px solid #ffccd5; border-radius: 12px; padding: 12px 15px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .city-box select { padding: 6px 12px; border: 1px solid #d63384; border-radius: 8px; color: #333; outline: none; font-size: 14px; background-color: #fff9fa; cursor: pointer; font-weight: bold; }
+
+        /* Галерея товаров */
+        .gallery { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+        .product-card { background: white; border: 1px solid #ffccd5; border-radius: 12px; width: 46%; max-width: 220px; padding: 8px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .product-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; background-color: #fff0f2; }
+        .product-title { font-size: 13px; font-weight: bold; margin: 6px 0 4px 0; text-align: center; }
+        .product-price { color: #d63384; font-weight: bold; margin-bottom: 6px; font-size: 13px; }
+        .add-to-cart-btn { background-color: #d63384; color: white; border: none; padding: 6px 10px; border-radius: 20px; font-size: 11px; cursor: pointer; width: 100%; font-weight: bold; }
+        
+        /* Дополнительные услуги */
+        .extra-services-section { background: white; border: 1px solid #ffccd5; border-radius: 12px; padding: 15px; margin: 25px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .extra-services-section h2 { color: #d63384; font-size: 18px; margin-top: 0; margin-bottom: 5px; }
+        .extra-main-note { font-size: 12px; color: #888; font-style: italic; margin-bottom: 15px; }
+        .extra-option { display: flex; align-items: center; gap: 10px; font-size: 15px; cursor: pointer; margin-bottom: 8px; padding: 4px 0; }
+        .extra-option input { width: 18px; height: 18px; accent-color: #d63384; }
+        
+        /* Интерактивная Корзина */
+        .cart-section { background: white; border: 2px solid #25D366; border-radius: 12px; padding: 15px; margin: 25px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .cart-section h2 { margin-top: 0; color: #25D366; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+        .cart-items { margin-bottom: 15px; }
+        .cart-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #eee; font-size: 14px; }
+        .cart-total { font-weight: bold; text-align: right; margin-bottom: 15px; font-size: 16px; color: #333; }
+        .whatsapp-btn { background-color: #25D366; color: white; text-decoration: none; display: block; text-align: center; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 16px; border: none; cursor: pointer; }
+    </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="logo"><a href="/">Flower Shop</a></div>
 
-    <div class="top-controls">
-      <div class="extra-options" style="position:relative;">
-        <button id="optionsBtn" class="btn">Опции ▾</button>
-        <div id="optionsMenu" class="options-menu" aria-hidden="true">
-          <label><input type="checkbox" id="giftWrap"> Упаковка подарка (+50 ₽)</label><br>
-          <label><input type="checkbox" id="includeCard"> Открытка (+30 ₽)</label>
+    <header>
+        <h1>🌸 Цветочная мастерская</h1>
+    </header>
+
+    <div class="container">
+        
+        <div class="city-box">
+            <label for="city-select">📍 Выберите город доставки:</label>
+            <select id="city-select">
+                <option value="Москва">Москва</option>
+                <option value="Санкт-Петербург">Санкт-Петербург</option>
+                <option value="Краснодар">Краснодар</option>
+                <option value="Екатеринбург">Екатеринбург</option>
+                <option value="Другой город">Другой город</option>
+            </select>
         </div>
-      </div>
 
-      <div class="cart" id="headerCart">
-        <button id="cartToggle" aria-expanded="false" class="btn cart-btn">
-          🧺 Корзина <span id="cartCount">0</span>
-        </button>
-      </div>
+        <div class="gallery" id="gallery"></div>
+
+        <div class="extra-services-section">
+            <h2>🎁 Добавить к букету</h2>
+            <div class="extra-main-note">Цены на дополнения согласовываются с флористом при заказе</div>
+            
+            <label class="extra-option">
+                <input type="checkbox" id="extra-candy">
+                <span>🍬 Коробка вкусных конфет</span>
+            </label>
+            <hr style="border: 0; border-top: 1px solid #fff0f2; margin: 4px 0;">
+
+            <label class="extra-option">
+                <input type="checkbox" id="extra-strawberries">
+                <span>🍓 Клубника в шоколаде</span>
+            </label>
+            <hr style="border: 0; border-top: 1px solid #fff0f2; margin: 4px 0;">
+
+            <label class="extra-option">
+                <input type="checkbox" id="extra-toy">
+                <span>🧸 Мягкая игрушка</span>
+            </label>
+            <hr style="border: 0; border-top: 1px solid #fff0f2; margin: 4px 0;">
+
+            <label class="extra-option">
+                <input type="checkbox" id="extra-card">
+                <span>💌 Открытка с пожеланием</span>
+            </label>
+            <hr style="border: 0; border-top: 1px solid #fff0f2; margin: 4px 0;">
+
+            <label class="extra-option">
+                <input type="checkbox" id="extra-balloons">
+                <span>🎈 Гелевые шарики с надписью</span>
+            </label>
+            <hr style="border: 0; border-top: 1px solid #fff0f2; margin: 4px 0;">
+
+            <label class="extra-option" style="margin-top: 8px;">
+                <input type="checkbox" id="extra-combo">
+                <span>🧺 VIP-набор: Цветы + Конфеты + Подарок</span>
+            </label>
+        </div>
+
+        <div class="cart-section">
+            <h2>🛒 Ваша корзина</h2>
+            <div id="cart-items" class="cart-items">
+                <p style="color: #888; font-style: italic; margin: 0;">Корзина пуста. Добавьте букеты!</p>
+            </div>
+            <div class="cart-total" id="cart-total">Итого: 0 руб.</div>
+            <a href="#" class="whatsapp-btn" onclick="sendOrder(event)">Оформить заказ в WhatsApp</a>
+        </div>
     </div>
-  </header>
 
-  <!-- Панель корзины -->
-  <aside id="cartPanel" class="cart-panel" aria-hidden="true">
-    <h3>Ваша корзина</h3>
-    <div id="cartItems"></div>
-    <div class="cart-footer">
-      <div>Итого: <span id="cartTotal">0</span> ₽</div>
-      <button id="checkoutBtn" class="btn primary">Оформить</button>
-    </div>
-  </aside>
+    <script>
+        const myPhoneNumber = "79280126881"; 
 
-  <main class="content">
-    <section class="products">
+        // Ваши загруженные фотографии
+        const uploadedPhotos = [
+            "PHOTO-2025-06-07-00-47-47.jpeg",
+            "PHOTO-2025-06-07-00-54-49.jpeg",
+            "PHOTO-2025-06-07-01-03-23.jpeg",
+            "PHOTO-2025-06-26-23-37-17.jpeg",
+            "PHOTO-2025-06-26-23-37-26.jpeg",
+            "PHOTO-2025-06-29-01-24-00 5.jpeg",
+            "PHOTO-2025-06-29-01-24-00 6.jpeg",
+            "PHOTO-2025-06-29-01-24-00 7.jpeg",
+            "PHOTO-2025-06-29-01-24-01 2.jpeg",
+            "PHOTO-2025-06-29-01-24-01 3.jpeg",
+            "PHOTO-2025-06-29-01-24-01 4.jpeg",
+            "PHOTO-2025-06-29-01-24-01.jpeg",
+            "PHOTO-2025-06-29-16-03-20.jpeg",
+            "PHOTO-2025-06-29-16-04-06.jpeg",
+            "PHOTO-2025-06-29-16-26-51.jpeg",
+            "PHOTO-2025-06-29-16-55-32.jpeg",
+            "PHOTO-2025-06-29-16-56-11.jpeg",
+            "PHOTO-2025-06-29-16-58-52.jpeg",
+            "PHOTO-2025-06-29-17-05-25.jpeg",
+            "PHOTO-2025-07-06-21-46-41.jpeg",
+            "PHOTO-2025-07-06-22-14-19.jpeg",
+            "PHOTO-2025-07-06-22-16-25.jpeg",
+            "PHOTO-2025-07-06-22-17-39.jpeg",
+            "PHOTO-2025-07-08-18-00-15.jpeg",
+            "PHOTO-2025-07-12-21-35-36.jpeg",
+            "PHOTO-2025-07-13-17-43-49 2.jpeg",
+            "PHOTO-2025-07-13-17-43-49 3.jpeg",
+            "PHOTO-2025-07-13-17-43-49 4.jpeg",
+            "PHOTO-2025-07-13-18-29-54 2.jpeg",
+            "PHOTO-2025-07-13-18-29-54.jpeg",
+            "PHOTO-2025-07-13-21-46-44 2.jpeg",
+            "PHOTO-2025-07-13-21-46-44 3.jpeg",
+            "PHOTO-2025-07-13-21-46-44 4.jpeg",
+            "PHOTO-2025-07-13-21-46-44 5.jpeg",
+            "PHOTO-2025-07-13-21-46-44.jpeg",
+            "PHOTO-2025-07-13-21-47-25.jpeg",
+            "PHOTO-2025-07-16-15-25-04 2.jpeg",
+            "PHOTO-2025-07-16-15-25-04.jpeg",
+            "jessie-daniella-QLuleNy8LMM-unsplash.jpeg"
+        ];
 
-      <!-- Пример карточек товаров с JSON-данными -->
+        // Генерируем каталог на 55 товаров
+        const products = [];
+        const baseUrl = "https://raw.githubusercontent.com/6nwbbbwhpz-lgtm/----/main/";
+        
+        for (let i = 1; i <= 55; i++) {
+            let defaultPrice = 2500;
+            if (i % 3 === 0) defaultPrice = 3200;
+            else if (i % 5 === 0) defaultPrice = 4500;
+            else if (i % 7 === 0) defaultPrice = 1800;
 
-      <article class="product-card" data-product-id="rose-10">
-        <img src="images/rose-10.jpg" alt="10 крупных красных роз в крафт-упаковке" class="product-image">
-        <h3 class="product-title">Классические красные розы</h3>
-        <div class="product-meta">10 роз · крафт-бумага · средний · 1500 ₽</div>
+            let fileName = uploadedPhotos[i % uploadedPhotos.length];
+            let fullUrl = baseUrl + encodeURI(fileName);
 
-        <script type="application/json" data-product-json>
-        {
-          "id":"rose-10",
-          "name":"Классические красные розы",
-          "price":1500,
-          "flowers":[{"type":"роза","color":"красная","count":10}],
-          "style":"романтический",
-          "size":"средний",
-          "wrap":"крафт",
-          "extras":[],
-          "scent":"сильный",
-          "season":"круглый год"
+            products.push({
+                id: i,
+                name: `Букет №${i}`,
+                price: defaultPrice,
+                url: fullUrl
+            });
         }
-        </script>
 
-        <p class="product-description" data-description></p>
-        <div class="product-actions"><button class="add-to-cart btn">В корзину</button></div>
-      </article>
+        let cart = [];
 
-      <article class="product-card" data-product-id="peony-06">
-        <img src="images/peony-06.jpg" alt="6 пастельно-розовых пионов с эвкалиптом в дизайнерской бумаге" class="product-image">
-        <h3 class="product-title">Пионы пастель</h3>
-        <div class="product-meta">6 пионов · эвкалипт · средний · 3200 ₽</div>
+        // Вывод карточек на экран
+        const galleryEl = document.getElementById('gallery');
+        products.forEach(prod => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <img src="${prod.url}" alt="${prod.name}" onerror="this.src='https://placehold.co/200x150/fff0f2/d63384?text=Фото+букета'">
+                <div class="product-title">${prod.name}</div>
+                <div class="product-price">${prod.price} руб.</div>
+                <button class="add-to-cart-btn" onclick="addToCart(${prod.id})">В корзину</button>
+            `;
+            galleryEl.appendChild(card);
+        });
 
-        <script type="application/json" data-product-json>
-        {
-          "id":"peony-06",
-          "name":"Пионы пастель",
-          "price":3200,
-          "flowers":[{"type":"пион","color":"пастельно-розовый","count":6},{"type":"эвкалипт","color":"серо-зелёный","count":5}],
-          "style":"романтический",
-          "size":"средний",
-          "wrap":"бумага",
-          "extras":["открытка"],
-          "scent":"легкий",
-          "season":"весна"
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            const inCart = cart.find(item => item.id === id);
+            if (inCart) { inCart.count++; } else { cart.push({ ...product, count: 1 }); }
+            updateCartUI();
         }
-        </script>
 
-        <p class="product-description" data-description></p>
-        <div class="product-actions"><button class="add-to-cart btn">В корзину</button></div>
-      </article>
-
-      <article class="product-card" data-product-id="rustic-01">
-        <img src="images/rustic-01.jpg" alt="Композиция из полевых цветов и трав в крафт-бумаге" class="product-image">
-        <h3 class="product-title">Рустик-микс</h3>
-        <div class="product-meta">Дикие цветы · крафт · малый · 900 ₽</div>
-
-        <script type="application/json" data-product-json>
-        {
-          "id":"rustic-01",
-          "name":"Рустик-микс",
-          "price":900,
-          "flowers":[{"type":"полевые цветы","color":"разноцветные","count":7}],
-          "style":"рустик",
-          "size":"малый",
-          "wrap":"крафт",
-          "extras":[],
-          "scent":"легкий",
-          "season":"лето"
+        function updateCartUI() {
+            const cartItemsEl = document.getElementById('cart-items');
+            const cartTotalEl = document.getElementById('cart-total');
+            if (cart.length === 0) {
+                cartItemsEl.innerHTML = '<p style="color: #888; font-style: italic; margin: 0;">Корзина пуста.</p>';
+                cartTotalEl.innerText = 'Итого: 0 руб.';
+                return;
+            }
+            cartItemsEl.innerHTML = '';
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price * item.count;
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `<span>🌸 ${item.name} (x${item.count})</span><span>${item.price * item.count} руб.</span>`;
+                cartItemsEl.appendChild(div);
+            });
+            cartTotalEl.innerText = `Итого: ${total} руб.`;
         }
-        </script>
 
-        <p class="product-description" data-description></p>
-        <div class="product-actions"><button class="add-to-cart btn">В корзину</button></div>
-      </article>
+        function sendOrder(e) {
+            e.preventDefault();
+            const selectedCity = document.getElementById('city-select').value;
+            
+            // Сбор данных о дополнительных товарах
+            const candySelected = document.getElementById('extra-candy').checked;
+            const strawberriesSelected = document.getElementById('extra-strawberries').checked;
+            const toySelected = document.getElementById('extra-toy').checked;
+            const cardSelected = document.getElementById('extra-card').checked;
+            const balloonsSelected = document.getElementById('extra-balloons').checked;
+            const comboSelected = document.getElementById('extra-combo').checked;
 
-      <article class="product-card" data-product-id="tulips-05">
-        <img src="images/tulips-05.jpg" alt="Яркий весенний микс тюльпанов" class="product-image">
-        <h3 class="product-title">Весенние тюльпаны</h3>
-        <div class="product-meta">5 тюльпанов · бумага · малый · 700 ₽</div>
+            if (cart.length === 0 && !candySelected && !strawberriesSelected && !toySelected && !cardSelected && !balloonsSelected && !comboSelected) {
+                alert('Пожалуйста, выберите товар!');
+                return;
+            }
 
-        <script type="application/json" data-product-json>
-        {
-          "id":"tulips-05",
-          "name":"Весенние тюльпаны",
-          "price":700,
-          "flowers":[{"type":"тюльпан","color":"микс","count":5}],
-          "style":"праздничный",
-          "size":"малый",
-          "wrap":"бу��ага",
-          "extras":[],
-          "scent":"нет запаха",
-          "season":"весна"
+            let message = `Здравствуйте! Мой заказ:\n📍 *Город доставки:* ${selectedCity}\n\n`;
+            let total = 0;
+
+            if (cart.length > 0) {
+                message += '*Выбранные букеты:*\n';
+                cart.forEach(item => {
+                    message += `• ${item.name} — ${item.count} шт. (${item.price * item.count} руб.)\n`;
+                    total += item.price * item.count;
+                });
+                message += `\n*Итого за букеты: ${total} руб.*\n`;
+            }
+
+            let hasExtras = false;
+            let extrasText = '\n🎁 *Дополнительно к заказу:*\n';
+            
+            if (candySelected) { extrasText += '• Коробка конфет 🍬\n'; hasExtras = true; }
+            if (strawberriesSelected) { extrasText += '• Клубника в шоколаде 🍓\n'; hasExtras = true; }
+            if (toySelected) { extrasText += '• Мягкая игрушка 🧸\n'; hasExtras = true; }
+            if (cardSelected) { extrasText += '• Открытка с пожеланием 💌\n'; hasExtras = true; }
+            if (balloonsSelected) { extrasText += '• Гелевые шарики с надписью 🎈\n'; hasExtras = true; }
+            if (comboSelected) { extrasText += '• VIP-набор (Цветы+Конфеты+Подарок) 🧺\n'; hasExtras = true; }
+
+            if (hasExtras) message += extrasText;
+
+            window.open(`https://wa.me/${myPhoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
         }
-        </script>
-
-        <p class="product-description" data-description></p>
-        <div class="product-actions"><button class="add-to-cart btn">В корзину</button></div>
-      </article>
-
-      <article class="product-card" data-product-id="lily-03">
-        <img src="images/lily-03.jpg" alt="Букет белых лилий в вазе" class="product-image">
-        <h3 class="product-title">Лилии белые</h3>
-        <div class="product-meta">3 лилии · ваза · средний · 2200 ₽</div>
-
-        <script type="application/json" data-product-json>
-        {
-          "id":"lily-03",
-          "name":"Лилии белые",
-          "price":2200,
-          "flowers":[{"type":"лилия","color":"белая","count":3}],
-          "style":"элегантный",
-          "size":"средний",
-          "wrap":"ваза",
-          "extras":[],
-          "scent":"сильный",
-          "season":"лето"
-        }
-        </script>
-
-        <p class="product-description" data-description></p>
-        <div class="product-actions"><button class="add-to-cart btn">В корзину</button></div>
-      </article>
-
-      <article class="product-card" data-product-id="orchid-01">
-        <img src="images/orchid-01.jpg" alt="Орхидея в кашпо — одна ветвь в стильном горшке" class="product-image">
-        <h3 class="product-title">Орхидея в горшке</h3>
-        <div class="product-meta">1 ветвь · кашпо · большой · 4300 ₽</div>
-
-        <script type="application/json" data-product-json>
-        {
-          "id":"orchid-01",
-          "name":"Орхидея в горшке",
-          "price":4300,
-          "flowers":[{"type":"орхидея","color":"белая","count":1}],
-          "style":"минималистичн��й",
-          "size":"большой",
-          "wrap":"ваза",
-          "extras":[],
-          "scent":"нет запаха",
-          "season":"круглый год"
-        }
-        </script>
-
-        <p class="product-description" data-description></p>
-        <div class="product-actions"><button class="add-to-cart btn">В корзину</button></div>
-      </article>
-
-      <article class="product-card" data-product-id="sunflower-03">
-        <img src="images/sunflower-03.jpg" alt="3 крупных подсолнуха — солнечный букет" class="product-image">
-        <h3 class="product-title">Подсолнухи</h3>
-        <div class="product-meta">3 подсолнуха · крафт · средний · 1100 ₽</div>
-
-        <script type="application/json" data-product-json>
-        {
-          "id":"sunflower-03",
-          "name":"Подсолнухи",
-          "price":1100,
-          "flowers":[{"type":"подсолнух","color":"жёлтый","count":3}],
-          "style":"солнечный",
-          "size":"средний",
-          "wrap":"крафт",
-          "extras":[],
-          "scent":"нет запаха",
-          "season":"лето"
-        }
-        </script>
-
-        <p class="product-description" data-description></p>
-        <div class="product-actions"><button class="add-to-cart btn">В корзину</button></div>
-      </article>
-
-      <article class="product-card" data-product-id="dry-01">
-        <img src="images/dry-01.jpg" alt="Бохо-композиция из сухоцветов" class="product-image">
-        <h3 class="product-title">Сухоцветы бохо</h3>
-        <div class="product-meta">Разнообразие · декор · малый · 1400 ₽</div>
-
-        <script type="application/json" data-product-json>
-        {
-          "id":"dry-01",
-          "name":"Сухоцветы бохо",
-          "price":1400,
-          "flowers":[{"type":"сухоцветы","color":"терракотовый/беж","count":10}],
-          "style":"бохо",
-          "size":"малый",
-          "wrap":"none",
-          "extras":[],
-          "scent":"нет запаха",
-          "season":"круглый год"
-        }
-        </script>
-
-        <p class="product-description" data-description></p>
-        <div class="product-actions"><button class="add-to-cart btn">В корзину</button></div>
-      </article>
-
-      <article class="product-card" data-product-id="premium-01">
-        <img src="images/premium-01.jpg" alt="Премиум микс: розы, ранункулюсы и зелень" class="product-image">
-        <h3 class="product-title">Премиум микс</h3>
-        <div class="product-meta">Розы + ранункулюсы · премиум · большой · 6500 ₽</div>
-
-        <script type="application/json" data-product-json>
-        {
-          "id":"premium-01",
-          "name":"Премиум микс",
-          "price":6500,
-          "flowers":[{"type":"роза","color":"слоновая кость","count":6},{"type":"ранункулюс","color":"персиковый","count":5}],
-          "style":"элегантный",
-          "size":"большой",
-          "wrap":"бумага",
-          "extras":["фирменная лента"],
-          "scent":"легкий",
-          "season":"круглый год"
-        }
-        </script>
-
-        <p class="product-description" data-description></p>
-        <div class="product-actions"><button class="add-to-cart btn">В корзину</button></div>
-      </article>
-
-    </section>
-  </main>
-
-  <script src="script.js"></script>
+    </script>
 </body>
 </html>
