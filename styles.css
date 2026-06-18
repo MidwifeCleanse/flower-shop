@@ -1,0 +1,55 @@
+/* styles.css */
+:root{ --accent:#2b8a3e; --muted:#666; --bg:#fafafa; }
+*{box-sizing:border-box}
+body{font-family:Inter,Arial,Helvetica,sans-serif;margin:0;background:var(--bg);color:#222;padding-top:74px}
+
+/* Header */
+.site-header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:74px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 1rem;
+  background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  z-index:1000;
+}
+.site-header .logo a{color:var(--accent);font-weight:700;text-decoration:none;font-size:1.1rem}
+.top-controls{display:flex;gap:0.75rem;align-items:center}
+
+/* options menu */
+.options-menu{position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid #e6e6e6;padding:0.5rem;min-width:200px;box-shadow:0 8px 20px rgba(0,0,0,0.08);display:none}
+.options-menu.show{display:block}
+
+/* cart panel */
+.cart-panel{position:fixed;top:74px;right:1rem;width:360px;max-height:calc(100vh - 100px);overflow:auto;background:#fff;border:1px solid #e6e6e6;box-shadow:0 10px 30px rgba(0,0,0,0.12);padding:0.75rem;z-index:1001;display:none;border-radius:8px}
+.cart-panel.open{display:block}
+.cart-panel h3{margin:0 0 .5rem 0}
+.cart-row{padding:.4rem 0;border-bottom:1px dashed #eee}
+.cart-footer{display:flex;justify-content:space-between;align-items:center;margin-top:.6rem}
+
+.btn{background:transparent;border:1px solid #ddd;padding:0.4rem 0.6rem;border-radius:8px;cursor:pointer}
+.btn.primary{background:var(--accent);color:#fff;border-color:transparent}
+.cart-btn{display:flex;align-items:center;gap:0.5rem}
+
+/* Content */
+.content{max-width:1100px;margin:1.25rem auto;padding:0 1rem}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}
+.product-card{border:1px solid #eee;padding:12px;border-radius:8px;background:#fff}
+.product-image{width:100%;height:180px;object-fit:cover;border-radius:6px}
+.product-title{margin:8px 0 4px;font-size:1.05rem}
+.product-meta{color:var(--muted);font-size:0.9rem;margin-bottom:8px}
+.product-description{color:#333;line-height:1.4;margin-bottom:10px;font-size:0.95rem;min-height:48px}
+.product-actions{display:flex;justify-content:flex-end}
+
+/* Responsive tweaks */
+@media (max-width:600px){
+  .site-header{padding:0 0.5rem;height:62px}
+  body{padding-top:62px}
+  .cart-panel{right:.5rem;width:92vw}
+  .product-image{height:150px}
+}
