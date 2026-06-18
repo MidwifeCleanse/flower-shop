@@ -11,12 +11,12 @@
         .container { max-width: 800px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
         
         /* Выбор города */
-        .city-box { background: white; border: 1px solid #ffccd5; border-radius: 12px; padding: 12px 15px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .city-box { background: white; border: 1px solid #ffccd5; border-radius: 12px; padding: 12px 15px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); }
         .city-box select { padding: 6px 12px; border: 1px solid #d63384; border-radius: 8px; color: #333; outline: none; font-size: 14px; background-color: #fff9fa; cursor: pointer; font-weight: bold; }
 
         /* Галерея товаров */
         .gallery { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-        .product-card { background: white; border: 1px solid #ffccd5; border-radius: 12px; width: 46%; max-width: 220px; padding: 8px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .product-card { background: white; border: 1px solid #ffccd5; border-radius: 12px; width: 46%; max-width: 220px; padding: 8px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 6px 10px rgba(0,0,0,0.03); }
         .product-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; background-color: #fff0f2; }
         .product-title { font-size: 13px; font-weight: bold; margin: 6px 0 4px 0; text-align: center; }
         .product-price { color: #d63384; font-weight: bold; margin-bottom: 6px; font-size: 13px; }
@@ -35,7 +35,7 @@
         .cart-items { margin-bottom: 15px; }
         .cart-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #eee; font-size: 14px; }
         .cart-total { font-weight: bold; text-align: right; margin-bottom: 15px; font-size: 16px; color: #333; }
-        .whatsapp-btn { background-color: #25D366; color: white; text-decoration: none; display: block; text-align: center; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 16px; border: none; cursor: pointer; }
+        .whatsapp-btn { background-color: #25D366; color: white; text-decoration: none; display: block; text-align: center; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -112,19 +112,19 @@
     <script>
         const myPhoneNumber = "79280126881"; 
 
-        // Ваши загруженные фотографии
+        // Ваши загруженные фотографии (санацированые имена)
         const uploadedPhotos = [
             "PHOTO-2025-06-07-00-47-47.jpeg",
             "PHOTO-2025-06-07-00-54-49.jpeg",
             "PHOTO-2025-06-07-01-03-23.jpeg",
             "PHOTO-2025-06-26-23-37-17.jpeg",
             "PHOTO-2025-06-26-23-37-26.jpeg",
-            "PHOTO-2025-06-29-01-24-00 5.jpeg",
-            "PHOTO-2025-06-29-01-24-00 6.jpeg",
-            "PHOTO-2025-06-29-01-24-00 7.jpeg",
-            "PHOTO-2025-06-29-01-24-01 2.jpeg",
-            "PHOTO-2025-06-29-01-24-01 3.jpeg",
-            "PHOTO-2025-06-29-01-24-01 4.jpeg",
+            "PHOTO-2025-06-29-01-24-00_5.jpeg",
+            "PHOTO-2025-06-29-01-24-00_6.jpeg",
+            "PHOTO-2025-06-29-01-24-00_7.jpeg",
+            "PHOTO-2025-06-29-01-24-01_2.jpeg",
+            "PHOTO-2025-06-29-01-24-01_3.jpeg",
+            "PHOTO-2025-06-29-01-24-01_4.jpeg",
             "PHOTO-2025-06-29-01-24-01.jpeg",
             "PHOTO-2025-06-29-16-03-20.jpeg",
             "PHOTO-2025-06-29-16-04-06.jpeg",
@@ -139,25 +139,25 @@
             "PHOTO-2025-07-06-22-17-39.jpeg",
             "PHOTO-2025-07-08-18-00-15.jpeg",
             "PHOTO-2025-07-12-21-35-36.jpeg",
-            "PHOTO-2025-07-13-17-43-49 2.jpeg",
-            "PHOTO-2025-07-13-17-43-49 3.jpeg",
-            "PHOTO-2025-07-13-17-43-49 4.jpeg",
-            "PHOTO-2025-07-13-18-29-54 2.jpeg",
+            "PHOTO-2025-07-13-17-43-49_2.jpeg",
+            "PHOTO-2025-07-13-17-43-49_3.jpeg",
+            "PHOTO-2025-07-13-17-43-49_4.jpeg",
+            "PHOTO-2025-07-13-18-29-54_2.jpeg",
             "PHOTO-2025-07-13-18-29-54.jpeg",
-            "PHOTO-2025-07-13-21-46-44 2.jpeg",
-            "PHOTO-2025-07-13-21-46-44 3.jpeg",
-            "PHOTO-2025-07-13-21-46-44 4.jpeg",
-            "PHOTO-2025-07-13-21-46-44 5.jpeg",
+            "PHOTO-2025-07-13-21-46-44_2.jpeg",
+            "PHOTO-2025-07-13-21-46-44_3.jpeg",
+            "PHOTO-2025-07-13-21-46-44_4.jpeg",
+            "PHOTO-2025-07-13-21-46-44_5.jpeg",
             "PHOTO-2025-07-13-21-46-44.jpeg",
             "PHOTO-2025-07-13-21-47-25.jpeg",
-            "PHOTO-2025-07-16-15-25-04 2.jpeg",
+            "PHOTO-2025-07-16-15-25-04_2.jpeg",
             "PHOTO-2025-07-16-15-25-04.jpeg",
             "jessie-daniella-QLuleNy8LMM-unsplash.jpeg"
         ];
 
         // Генерируем каталог на 55 товаров
         const products = [];
-        const baseUrl = "https://raw.githubusercontent.com/6nwbbbwhpz-lgtm/----/main/";
+        const baseUrl = "images/"; // локальная папка images/
         
         for (let i = 1; i <= 55; i++) {
             let defaultPrice = 2500;
@@ -184,7 +184,7 @@
             const card = document.createElement('div');
             card.className = 'product-card';
             card.innerHTML = `
-                <img src="${prod.url}" alt="${prod.name}" onerror="this.src='https://placehold.co/200x150/fff0f2/d63384?text=Фото+букета'">
+                <img src="${prod.url}" alt="${prod.name}" onerror="this.onerror=null;this.src='https://placehold.co/200x150/fff0f2/d63384?text=Фото+букета'">
                 <div class="product-title">${prod.name}</div>
                 <div class="product-price">${prod.price} руб.</div>
                 <button class="add-to-cart-btn" onclick="addToCart(${prod.id})">В корзину</button>
