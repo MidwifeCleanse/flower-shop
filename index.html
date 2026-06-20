@@ -1,0 +1,327 @@
+// --- КОНФИГУРАЦИЯ ---
+const config = {
+    siteName: "🌸 Цветочная Мастерская",
+    phoneNumber: "+79280126881", // Номер для WhatsApp
+    whatsappApiUrl: (number, message) => `https://api.whatsapp.com/send?phone=${number}&text=${encodeURIComponent(message)}`,
+    imageBaseUrl: "https://raw.githubusercontent.com/6nwbbbwhpz-lgtm/----/main/", // Базовый URL для изображений
+    imageNotFoundPlaceholder: "https://placehold.co/280x200/fff0f2/d63384?text=Букет", // Заглушка для отсутствующих изображений
+    minimumBouquetPrice: 3500, // Минимальная цена букета
+    maxBouquetPriceOffset: 8000, // Максимальная разница от минимальной цены для случайной цены
+    bouquetsPerPage: 12, // Количество букетов для отображения на странице (можно расширить постраничной навигацией)
+};
+
+// --- ДАННЫЕ ОТРИСОВКИ ---
+
+// Реалистичные описания букетов (можно будет перемешать или выбрать случайное)
+const bouquetDescriptions = [
+    "Нежный букет из свежих роз",
+    "Яркая композиция из сезонных цветов",
+    "Элегантный букет с премиальными пионами",
+    "Солнечная композиция, дарящая улыбку",
+    "Утонченная сборка с экзотическими цветами",
+    "Весенний букет для особого случая",
+    "Экзотический букет с ароматными орхидеями",
+    "Романтичный букет, говорящий о чувствах",
+    "Нежный букет с персиковыми нотками",
+    "Яркий букет из ароматных астр и гербер",
+    "Современная композиция в минималистичном стиле",
+    "Пышный букет из ранункулюсов и роз"
+];
+
+// Фотографии букетов (имена файлов)
+const bouquetImageFiles = [
+    "PHOTO-2025-06-07-00-47-47.jpeg",
+    "PHOTO-2025-06-07-00-54-49.jpeg",
+    "PHOTO-2025-06-07-01-03-23.jpeg",
+    "PHOTO-2025-06-26-23-37-17.jpeg",
+    "PHOTO-2025-06-26-23-37-26.jpeg",
+    "PHOTO-2025-06-29-01-24-00 5.jpeg",
+    "PHOTO-2025-06-29-01-24-00 6.jpeg",
+    "PHOTO-2025-06-29-01-24-00 7.jpeg",
+    "PHOTO-2025-06-29-01-24-01 2.jpeg",
+    "PHOTO-2025-06-29-01-24-01 3.jpeg",
+    "PHOTO-2025-06-29-01-24-01 4.jpeg",
+    "PHOTO-2025-06-29-01-24-01.jpeg",
+    "PHOTO-2025-06-29-16-03-20.jpeg",
+    "PHOTO-2025-06-29-16-04-06.jpeg",
+    "PHOTO-2025-06-29-16-26-51.jpeg",
+    "PHOTO-2025-06-29-16-55-32.jpeg",
+    "PHOTO-2025-06-29-16-56-11.jpeg",
+    "PHOTO-2025-06-29-16-58-52.jpeg",
+    "PHOTO-2025-06-29-17-05-25.jpeg",
+    "PHOTO-2025-07-06-21-46-41.jpeg",
+    "PHOTO-2025-07-06-22-14-19.jpeg",
+    "PHOTO-2025-07-06-22-16-25.jpeg",
+    "PHOTO-2025-07-06-22-17-39.jpeg",
+    "PHOTO-2025-07-08-18-00-15.jpeg",
+    "PHOTO-2025-07-12-21-35-36.jpeg",
+    "PHOTO-2025-07-13-17-43-49 2.jpeg",
+    "PHOTO-2025-07-13-17-43-49 3.jpeg",
+    "PHOTO-2025-07-13-17-43-49 4.jpeg",
+    "PHOTO-2025-07-13-18-29-54 2.jpeg",
+    "PHOTO-2025-07-13-18-29-54.jpeg",
+    "PHOTO-2025-07-13-21-46-44 2.jpeg",
+    "PHOTO-2025-07-13-21-46-44 3.jpeg",
+    "PHOTO-2025-07-13-21-46-44 4.jpeg",
+    "PHOTO-2025-07-13-21-46-44 5.jpeg",
+    "PHOTO-2025-07-13-21-46-44.jpeg",
+    "PHOTO-2025-07-13-21-47-25.jpeg",
+    "PHOTO-2025-07-16-15-25-04 2.jpeg",
+    "PHOTO-2025-07-16-15-25-04.jpeg",
+    "jessie-daniella-QLuleNy8LMM-unsplash.jpeg"
+];
+
+// --- КОРЗИНА ---
+let cart = []; // Массив для хранения товаров в корзине
+let currentProducts = []; // Все доступные продукты (букеты)
+
+// --- ФУНКЦИИ ---
+
+/**
+ * Генерирует случайную цену в заданном диапазоне.
+ * @param {number} min - Минимальная цена
+ * @param {number} maxOffset - Максимальное смещение от минимальной цены
+ * @returns {number} Случайная цена
+ */
+function getRandomPrice(min, maxOffset) {
+    return min + Math.floor(Math.random() * maxOffset);
+}
+
+/**
+ * Создает экземпляр продукта (букета) с уникальными свойствами.
+ * @param {number} id - Уникальный идентификатор продукта
+ * @returns {object} Объект продукта
+ */
+function createProduct(id) {
+    const filename = bouquetImageFiles[id % bouquetImageFiles.length];
+    const description = bouquetDescriptions[id % bouquetDescriptions.length];
+    const price = getRandomPrice(config.minimumBouquetPrice, config.maxBouquetPriceOffset);
+    const url = filename ? `${config.imageBaseUrl}${encodeURI(filename)}` : config.imageNotFoundPlaceholder;
+
+    return {
+        id: id,
+        name: `Букет №${id}`,
+        price: price,
+        url: url,
+        description: description
+    };
+}
+
+/**
+ * Инициализирует список всех продуктов (букетов) и отрисовывает их.
+ */
+function initializeProducts() {
+    // Генерируем достаточное количество продуктов (например, 20 для примера)
+    for (let i = 1; i <= 20; i++) {
+        currentProducts.push(createProduct(i));
+    }
+    renderProducts(currentProducts);
+}
+
+/**
+ * Отрисовывает карточки продуктов в галерее.
+ * @param {Array<object>} productsToRender - Массив продуктов для отображения
+ */
+function renderProducts(productsToRender) {
+    const galleryEl = document.getElementById('gallery');
+    galleryEl.innerHTML = ''; // Очищаем предыдущее содержимое
+
+    if (productsToRender.length === 0) {
+        galleryEl.innerHTML = '<p>К сожалению, букетов пока нет. Скоро появятся!</p>';
+        return;
+    }
+
+    productsToRender.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+            <img src="${product.url}" alt="${product.name}" onerror="this.onerror=null;this.src='${config.imageNotFoundPlaceholder}';">
+            <div class="product-title">${product.name}</div>
+            <div class="product-description">${product.description}</div>
+            <div class="product-price">${product.price.toLocaleString('ru-RU')} руб.</div>
+            <button class="add-to-cart-btn" onclick="addToCart(${product.id})">В корзину</button>
+        `;
+        galleryEl.appendChild(card);
+    });
+}
+
+/**
+ * Добавляет продукт в корзину или увеличивает его количество.
+ * @param {number} id - ID продукта для добавления
+ */
+function addToCart(id) {
+    const product = currentProducts.find(p => p.id === id);
+    const existingItem = cart.find(item => item.id === id);
+
+    if (existingItem) {
+        existingItem.count++;
+    } else {
+        // Добавляем только необходимые свойства для корзины
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            count: 1
+        });
+    }
+    updateCartUI();
+}
+
+/**
+ * Обновляет отображение корзины на странице.
+ */
+function updateCartUI() {
+    const cartItemsEl = document.getElementById('cart-items');
+    const cartTotalEl = document.getElementById('cart-total');
+
+    if (cart.length === 0) {
+        cartItemsEl.innerHTML = '<p style="color: #888; font-style: italic; margin: 0;">Корзина пуста.</p>';
+        cartTotalEl.innerText = 'Итого: 0 руб.';
+        // Можно также скрыть кнопку заказа, если корзина пуста
+        document.querySelector('.whatsapp-btn').style.display = 'none';
+        return;
+    }
+
+    // Показываем кнопку заказа, если есть товары
+    document.querySelector('.whatsapp-btn').style.display = 'block';
+
+    cartItemsEl.innerHTML = ''; // Очищаем
+    let total = 0;
+
+    cart.forEach(item => {
+        const itemPrice = item.price * item.count;
+        total += itemPrice;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+            <span>🌸 ${item.name} (x${item.count})</span>
+            <span>${itemIntl.NumberFormat('ru-RU').format(itemPrice)} руб.</span>
+            <button class="remove-item-btn" onclick="removeFromCart(${item.id})" title="Удалить">❌</button>
+        `; // Добавляем кнопку удаления
+        cartItemsEl.appendChild(div);
+    });
+
+    cartTotalEl.innerText = `Итого: ${total.toLocaleString('ru-RU')} руб.`;
+}
+
+/**
+ * Удаляет товар из корзины.
+ * @param {number} id - ID продукта для удаления
+ */
+function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    updateCartUI();
+    // Если корзина стала пустой после удаления, нужно обновить UI
+    if (cart.length === 0) {
+        updateCartUI();
+    }
+}
+
+/**
+ * Обрабатывает событие отправки заказа через WhatsApp.
+ * @param {Event} e - Объект события
+ */
+function sendOrder(e) {
+    e.preventDefault(); // Предотвращаем стандартное поведение ссылки
+
+    if (cart.length === 0) {
+        alert('Ваша корзина пуста. Добавьте товары, чтобы оформить заказ!');
+        return;
+    }
+
+    const selectedCity = document.getElementById('city-select').value;
+
+    // Сбор данных о дополнительных товарах (чекбоксы)
+    const extras = {
+        candy: document.getElementById('extra-candy')?.checked,
+        strawberries: document.getElementById('extra-strawberries')?.checked,
+        toy: document.getElementById('extra-toy')?.checked,
+        card: document.getElementById('extra-card')?.checked,
+        balloons: document.getElementById('extra-balloons')?.checked,
+        combo: document.getElementById('extra-combo')?.checked,
+    };
+
+    let message = `Здравствуйте! Я хочу сделать заказ:\n\n`;
+    message += `📍 *Город доставки:* ${selectedCity}\n`;
+
+    // Добавление букетов в сообщение
+    if (cart.length > 0) {
+        message += `\n💐 *Букеты:*\n`;
+        let bouquetTotal = 0;
+        cart.forEach(item => {
+            const itemSubtotal = item.price * item.count;
+            message += `• ${item.name} (x${item.count}) — ${itemIntl.NumberFormat('ru-RU').format(itemSubtotal)} руб.\n`;
+            bouquetTotal += itemSubtotal;
+        });
+        message += `\n*Сумма за букеты: ${bouquetTotal.toLocaleString('ru-RU')} руб.*\n`;
+    }
+
+    // Добавление дополнительных опций в сообщение
+    let hasExtras = false;
+    let extrasMessage = `\n🎁 *Дополнительно:*\n`;
+
+    if (extras.candy) { extrasMessage += `• Коробка конфет 🍬\n`; hasExtras = true; }
+    if (extras.strawberries) { extrasMessage += `• Клубника в шоколаде 🍓\n`; hasExtras = true; }
+    if (extras.toy) { extrasMessage += `• Мягкая игрушка 🧸\n`; hasExtras = true; }
+    if (extras.card) { extrasMessage += `• Открытка с пожеланием 💌\n`; hasExtras = true; }
+    if (extras.balloons) { extrasMessage += `• Гелевые шарики с надписью 🎈\n`; hasExtras = true; }
+    if (extras.combo) { extrasMessage += `• VIP-набор: Букет + Конфеты + Подарок 🧺\n`; hasExtras = true; }
+
+    if (hasExtras) {
+        message += extrasMessage;
+        // Примечание: Цена дополнительных опций обычно уточняется отдельно.
+        message += `\n*(Стоимость дополнительных опций будет уточнена при подтверждении заказа)*\n`;
+    }
+
+    // Добавляем общую сумму, если она рассчитана
+    const totalCartPrice = cart.reduce((sum, item) => sum + item.price * item.count, 0);
+    if (totalCartPrice > 0) {
+         message += `\n💰 *Общая сумма заказа (букеты): ${totalCartPrice.toLocaleString('ru-RU')} руб.*`;
+    }
+    message += `\n\nПожалуйста, подтвердите заказ и сообщите детали оплаты/доставки.`;
+
+    // Открываем WhatsApp
+    const whatsappUrl = config.whatsappApiUrl(config.phoneNumber, message);
+    window.open(whatsappUrl, '_blank');
+}
+
+/**
+ * Инициализирует страницу при ее полной загрузке.
+ */
+function initPage() {
+    document.title = config.siteName;
+    document.querySelector('header h1').innerText = config.siteName;
+
+    // Устанавливаем правильные ссылки на контакты
+    document.querySelector('.header-contacts a[href*="wa.me"]').href = `https://wa.me/${config.phoneNumber}`;
+    document.querySelector('.header-contacts a[href*="tel:"]').href = `tel:${config.phoneNumber}`;
+    document.querySelector('.header-contacts .contact-btn:first-child').innerText = `💬 WhatsApp: ${config.phoneNumber.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '+$1 ($2) $3-$4')}`;
+    document.querySelector('.header-contacts .contact-btn:last-child').innerText = `☎️ Позвонить: ${config.phoneNumber.replace(/(\d{3})(\d{3})(\d{2})(\d{2})/, '+$1 ($2) $3-$4')}`;
+
+    // Обновляем UI корзины, чтобы показать, что она пуста
+    updateCartUI();
+
+    // Инициализируем продукты
+    initializeProducts();
+
+    // Привязываем обработчик к кнопке заказа
+    const orderButton = document.querySelector('.whatsapp-btn');
+    if (orderButton) {
+        orderButton.onclick = sendOrder;
+    }
+
+    // Скрываем кнопку, если корзина пуста при загрузке
+    if (cart.length === 0) {
+        orderButton.style.display = 'none';
+    }
+
+    // Обработка для отзывов (из flower_shop_ultra_premium.html)
+    const reviewsSection = document.querySelector('section:has(.review)'); // Находим секцию с отзывами
+    if (reviewsSection) {
+        // Можно добавить динамическое добавление или просто оставить как есть
+        // В данном случае, отзывы из flower_shop_ultra_premium.html уже встроены в HTML
+    }
+}
+
+// --- СЛУШАТЕЛИ СОБЫТИЙ ---
+document.addEventListener('DOMContentLoaded', initPage);
