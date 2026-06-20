@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Магия Цветов — Premium Цветочная Мастерская</title>
+  <style>
+    :root {
+      --bg: #fdfbfb;
+      --bg-card: #ffffff;
+      --text-dark: #111111;
+      --text-muted: #777777;
+      --accent-pink: #e34b78;
+      --header-black: #0b0b0b;
+      --shadow-sm: 0 4px 15px rgba(0,0,0,0.03);
+      --shadow-md: 0 10px 30px rgba(0,0,0,0.06);
+      --radius-card: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+      padding-bottom: 40px;
+    }
+
+    /* ВЕРХНЯЯ ПРЕМИУМ-ШАПКА (По скриншоту) */
+    .site-header {
+      background: var(--header-black);
+      color: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 15px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left { display: flex; align-items: center; gap: 30px; }
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #ffffff;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    .logo span { display: block; font-size: 9px; letter-spacing: 4px; opacity: 0.7; font-weight: 300; margin-top: -2px;}
+    
+    .nav-menu { display: flex; gap: 20px; list-style: none; }
+    .nav-menu a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 13px; font-weight: 500; transition: 0.2s; }
+    .nav-menu a:hover { color: #ffffff; }
+
+    .header-actions { display: flex; align-items: center; gap: 20px; }
+    .city-select {
+      background: transparent;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+      outline: none;
+    }
+    .icon-trigger { position: relative; background: none; border: none; color: white; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .badge-count {
+      position: absolute; -top: 7px; -right: 8px;
+      background: var(--accent-pink); color: white;
+      font-size: 9px; font-weight: 700; padding: 2px 5px; border-radius: 10px; min-width: 15px;
+    }
+
+    /* БАННЕР / ГЕРОЙ-БЛОК */
+    .hero-banner {
+      background: #fbf0f3;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 60px 8%;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+    .hero-content { max-width: 500px; z-index: 2; }
+    .hero-tagline { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 15px; font-weight: 600; }
+    .hero-title { font-size: 42px; font-weight: 700; line-height: 1.2; margin-bottom: 20px; letter-spacing: -0.5px; }
+    .hero-subtitle { font-size: 15px; color: var(--text-muted); line-height: 1.5; margin-bottom: 30px; }
+    .hero-btn {
+      background: var(--accent-pink); color: white; text-decoration: none;
+      padding: 15px 35px; border-radius: 4px; font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px; display: inline-block; transition: 0.2s; border: none; cursor: pointer;
+    }
+    .hero-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    
+    .hero-img-wrap { max-width: 50%; display: flex; justify-content: flex-end; }
+    .hero-img-wrap img { max-width: 100%; height: auto; object-fit: contain; }
+
+    /* КАТАЛОГ И СЕТКА */
+    .container { max-width: 1300px; margin: 0 auto; padding: 0 20px; }
+    .section-block { margin-bottom: 50px; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 12px; }
+    .section-title { font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    .see-all { color: var(--text-muted); text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 5px; }
+    .see-all:hover { color: var(--text-dark); }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    @media (min-width: 768px) {
+      .products-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+    }
+    @media (min-width: 1200px) {
+      .products-grid { grid-template-columns: repeat(6, 1fr); }
+    }
+
+    /* КАРТОЧКА ТОВAРА (Копия со скриншота) */
+    .product-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: var(--shadow-sm);
+    }
+    .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    
+    .card-img-wrap { position: relative; width: 100%; padding-top: 100%; background: #f7f7f7; }
+    .card-img-wrap img { position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; }
+    
+    .card-badge {
+      position: absolute; top: 10px; left: 10px;
+      background: var(--accent-pink); color: white;
+      font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; z-index: 2;
+    }
+    .card-fav-btn {
+      position: absolute; top: 10px; right: 10px;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(255,255,255,0.9); border: none;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 13px; z-index: 2; color: #ccc; transition: 0.2s;
+    }
+    .card-fav-btn.active { color: #ff4d6d; }
+
+    .card-body { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
+    .card-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; color: var(--text-dark); line-height: 1.3; }
+    .card-desc { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.3; flex-grow: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    
+    .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+    .card-price { font-size: 14px; font-weight: 800; color: var(--text-dark); }
+    .card-buy-btn {
+      width: 32px; height: 32px; background: #111111; color: white;
+      border: none; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 14px; transition: 0.2s;
+    }
+    .card-buy-btn:hover { background: var(--accent-pink); }
+
+    /* БЛОК ПРЕИМУЩЕСТВ (Внизу скриншота) */
+    .features-bar {
+      background: #fbf7f8;
+      border-top: 1px solid #f2e6e8;
+      padding: 25px 40px;
+      margin-top: 60px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .feature-item { display: flex; align-items: center; gap: 12px; }
+    .feature-icon { font-size: 24px; color: var(--accent-pink); }
+    .feature-text h5 { font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
+    .feature-text p { font-size: 11px; color: var(--text-muted); }
+
+    /* ДОПОЛНИТЕЛЬНЫЕ ОКНА (КОРЗИНА / ИЗБРАННОЕ) */
+    .drawer-backdrop { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(3px); z-index: 1500; opacity: 0; visibility: hidden; transition: 0.3s; }
+    .drawer-backdrop.open { opacity: 1; visibility: visible; }
+    .drawer { position: fixed; top: 0; right: -380px; bottom: 0; width: 100%; max-width: 380px; background: white; z-index: 1600; display: flex; flex-direction: column; transition: right 0.3s ease; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
+    .drawer.open { right: 0; }
+    .drawer-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+    .drawer-header h3 { font-size: 16px; font-weight: 700; text-transform: uppercase; }
+    .drawer-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #888; }
+    .drawer-content { padding: 20px; overflow-y: auto; flex-grow: 1; }
+    
+    .cart-item { display: flex; gap: 12px; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px dashed #eee; align-items: center; }
+    .cart-item-info { flex-grow: 1; }
+    .cart-item-title { font-size: 13px; font-weight: 700; }
+    .cart-item-price { font-size: 12px; color: var(--accent-pink); font-weight: 700; margin-top: 2px; }
+    .qty-box { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+    .qty-btn { width: 22px; height: 22px; border: 1px solid #ddd; background: #fff; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; }
+    .item-del { background: none; border: none; color: #cc4444; font-size: 11px; cursor: pointer; margin-left: auto; }
+
+    .drawer-footer { padding: 20px; border-top: 1px solid #eee; background: #fafafa; }
+    .total-line { display: flex; justify-content: space-between; font-weight: 700; font-size: 15px; margin-bottom: 15px; }
+    .order-btn { width: 100%; background: #25d366; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    
+    .empty-msg { text-align: center; color: var(--text-muted); padding: 40px 10px; font-size: 13px; }
+  </style>
+</head>
+<body>
+
+  <!-- ШАПКА МАГАЗИНА -->
+  <header class="site-header">
+    <div class="header-left">
+      <a href="#" class="logo">
+        Luxe Flowers
+        <span>Магия Цветов</span>
+      </a>
+      <select id="citySelect" class="city-select">
+        <option value="Москва">📍 Москва</option>
+        <option value="Санкт-Петербург">📍 Санкт-Петербург</option>
+        <option value="Краснодар">📍 Краснодар</option>
+        <option value="Екатеринбург">📍 Екатеринбург</option>
+      </select>
+    </div>
+
+    <div class="header-actions">
+      <button class="icon-trigger" id="favToggle">
+        ♡ <span id="favCount" class="badge-count">0</span>
+      </button>
+      <button class="icon-trigger" id="cartToggle">
+        🛒 <span id="cartCount" class="badge-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ГЕРОЙ-БАННЕР -->
+  <section class="hero-banner">
+    <div class="hero-content">
+      <div class="hero-tagline">Роскошные букеты для важных моментов</div>
+      <h1 class="hero-title">ЦВЕТЫ, КОТОРЫЕ ГОВОРЯТ ЗА ВАС</h1>
+      <p class="hero-subtitle">Премиальные цветы с доставкой по вашему адресу в идеальном состоянии.</p>
+      <button class="hero-btn" onclick="document.getElementById('section-bouquets').scrollIntoView();">Выбрать букет</button>
+    </div>
+    <div class="hero-img-wrap">
+      <!-- Изображение главного букета с баннера -->
+      <img src="image_2.png" alt="Premium Bouquet" onerror="this.src='https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=600&q=80'">
+    </div>
+  </section>
+
+  <!-- ОСНОВНОЙ КАТАЛОГ СЕКЦИЙ -->
+  <main class="container">
+    
+    <!-- СЕКЦИЯ: БУКЕТЫ -->
+    <section class="section-block" id="section-bouquets">
+      <div class="section-header">
+        <h2 class="section-title">Букеты</h2>
+        <a href="#" class="see-all">Смотреть все →</a>
+      </div>
+      <div class="products-grid" id="grid-bouquets"></div>
+    </section>
+
+    <!-- СЕКЦИЯ: КЛУБНИКА В ШОКОЛАДЕ -->
+    <section class="section-block" id="section-strawberries">
+      <div class="section-header">
+        <h2 class="section-title">Клубника в шоколаде</h2>
+        <a href="#" class="see-all">Смотреть все →</a>
+      </div>
+      <div class="products-grid" id="grid-strawberries"></div>
+    </section>
+
+    <!-- СЕКЦИЯ: ИГРУШКИ -->
+    <section class="section-block" id="section-toys">
+      <div class="section-header">
+        <h2 class="section-title">Игрушки</h2>
+        <a href="#" class="see-all">Смотреть все →</a>
+      </div>
+      <div class="products-grid" id="grid-toys"></div>
+    </section>
+
+  </main>
+
+  <!-- НИЖНЯЯ ПАНЕЛЬ ПРЕИМУЩЕСТВ -->
+  <div class="features-bar">
+    <div class="feature-item">
+      <div class="feature-icon">🌸</div>
+      <div class="feature-text">
+        <h5>Свежие цветы</h5>
+        <p>Поставки каждый день</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🚚</div>
+      <div class="feature-text">
+        <h5>Быстрая доставка</h5>
+        <p>Доставка от 1 часа</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🎁</div>
+      <div class="feature-text">
+        <h5>Бережная упаковка</h5>
+        <p>Каждый букет как искусство</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">✨</div>
+      <div class="feature-text">
+        <h5>100% Гарантия</h5>
+        <p>Вернем деньги, если не понравится</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BACKDROP И ЭКРАНЫ КОРЗИНЫ -->
+  <div class="drawer-backdrop" id="backdrop"></div>
+
+  <!-- Drawer Избранное -->
+  <div class="drawer" id="favDrawer">
+    <div class="drawer-header">
+      <h3>Избранное</h3>
+      <button class="drawer-close" onclick="closeDrawers()">&times;</button>
+    </div>
+    <div class="drawer-content" id="favContent"></div>
+  </div>
+
+  <!-- Drawer Корзина -->
+  <div class="drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <h3>Корзина</h3>
+      <button class="drawer-close" onclick="closeDrawers()">&times;</button>
+    </div>
+    <div class="drawer-content" id="cartContent"></div>
+    <div class="drawer-footer">
+      <div class="total-line">
+        <span>Итого:</span>
+        <span id="cartTotal">0 ₽</span>
+      </div>
+      <button class="order-btn" onclick="sendWhatsApp()">💬 Заказать в WhatsApp</button>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- БЛОК АДМИН-ПАНЕЛИ (ВАРИАНТ 1) -->
+  <!-- ========================================== -->
+  <div style="position:fixed; bottom:20px; left:20px; z-index:9999; background:#e34b78; color:#fff; width:45px; height:45px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.15); font-size:20px;" onclick="toggleAdminPanel()">⚙️</div>
+
+  <div id="adminModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:100000; align-items:center; justify-content:center; color:#333;">
+    <div style="background:#fff; width:90%; max-width:550px; max-height:85vh; overflow-y:auto; padding:25px; border-radius:12px; position:relative;">
+      <span style="position:absolute; top:15px; right:20px; font-size:24px; cursor:pointer;" onclick="toggleAdminPanel()">&times;</span>
+      <h3 style="margin-bottom:15px; color:#e34b78;">🌸 Редактор Витрины Магазина</h3>
+      
+      <div style="background:#fff0f5; padding:15px; border-radius:8px; margin-bottom:15px;">
+        <h4 style="margin-bottom:10px; font-size:14px;">✨ Добавить товар:</h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+          <input type="text" id="adm-name" placeholder="Название" style="padding:8px; border:1px solid #ccc; border-radius:4px;">
+          <input type="number" id="adm-price" placeholder="Цена цифрами" style="padding:8px; border:1px solid #ccc; border-radius:4px;">
+          <select id="adm-category" style="padding:8px; border:1px solid #ccc; border-radius:4px;">
+            <option value="Букеты">Букеты</option>
+            <option value="Клубника в шоколаде">Клубника в шоколаде</option>
+            <option value="Игрушки">Игрушки</option>
+          </select>
+          <input type="text" id="adm-badge" placeholder="Бейдж (например: Хит)" style="padding:8px; border:1px solid #ccc; border-radius:4px;">
+        </div>
+        <input type="text" id="adm-image" placeholder="Имя файла фото (например: image_2.png)" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px; margin-bottom:8px;">
+        <button onclick="addAdminProduct()" style="width:100%; padding:10px; background:#e34b78; color:white; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">Добавить на витрину</button>
+      </div>
+
+      <h4 style="margin-bottom:8px;">📋 Список текущих товаров:</h4>
+      <div id="adminProductsList" style="max-height:150px; overflow-y:auto; border:1px solid #eee; padding:5px; background:#fafafa; margin-bottom:15px;"></div>
+
+      <button onclick="generateAdminCode()" style="width:100%; padding:10px; background:#28a745; color:white; border:none; border-radius:4px; font-weight:bold; cursor:pointer; margin-bottom:8px;">Сгенерировать код для GitHub</button>
+      <textarea id="adm-code-output" readonly style="width:100%; height:100px; display:none; font-family:monospace; font-size:11px; padding:5px;"></textarea>
+    </div>
+  </div>
+
+  <!-- СКРИПТЫ ЛОГИКИ МАГАЗИНА -->
+  <script>
+    const WHATSAPP_PHONE = "79280126881";
+
+    // Изначальная база данных, полностью скопированная с ваших скриншотов
+    window.PRODUCTS = [
+      // БУКЕТЫ
+      { id: 1, name: "Букет из пионов", price: 5890, category: "Букеты", desc: "Нежные пионы в стильной упаковке", img: "image_2.png" },
+      { id: 2, name: "Белые розы 31 шт.", price: 4990, category: "Букеты", desc: "Элегантный букет из белых роз", img: "image_3.png" },
+      { id: 3, name: "Розовый микс", price: 4790, category: "Букеты", desc: "Микс из роз, гортензий и эустомы", img: "image_2.png" },
+      { id: 4, name: "Букет из 51 розы", price: 6990, category: "Букеты", desc: "Классический букет из красных роз", img: "image_3.png" },
+      { id: 5, name: "Нежный букет", price: 3590, category: "Букеты", desc: "Легкий и нежный букет для особого случая", img: "image_2.png" },
+      { id: 6, name: "Букет «Мечта»", price: 4490, category: "Букеты", desc: "Воздушный микс в розовых тонах", img: "image_3.png" },
+      { id: 7, name: "Сиреневый рай", price: 4190, category: "Букеты", desc: "Микс сиреневых цветов с ароматной лавандой", img: "image_2.png" },
+      { id: 8, name: "Розовые пионы", price: 5290, category: "Букеты", desc: "Пышные розовые пионы в крафте", img: "image_3.png" },
+      { id: 9, name: "Небесный микс", price: 5890, category: "Букеты", desc: "Голубые гортензии и роза в стильной упаковке", img: "image_2.png" },
+      { id: 10, name: "Пионы и розы", price: 6290, category: "Букеты", desc: "Роскошное сочетание пионов и роз", img: "image_3.png" },
+      { id: 11, name: "Эустома белая", price: 3290, category: "Букеты", desc: "Нежная эустома в стильной упаковке", img: "image_2.png" },
+      { id: 12, name: "Вечерний блюз", price: 4890, category: "Букеты", desc: "Элегантный микс в холодных оттенках", img: "image_3.png" },
+
+      // КЛУБНИКА В ШОКОЛАДЕ
+      { id: 13, name: "Клубника в молочном шоколаде", price: 2990, category: "Клубника в шоколаде", desc: "Свежая клубника в бельгийском шоколаде", img: "image_2.png" },
+      { id: 14, name: "Клубника в белом шоколаде", price: 2990, category: "Клубника в шоколаде", desc: "Нежная клубника в белом шоколаде", img: "image_3.png" },
+      { id: 15, name: "Ассорти клубники", price: 3490, category: "Клубника в шоколаде", desc: "Микс из молочного, белого и темного шоколада", img: "image_2.png" },
+      { id: 16, name: "Клубника в шоколаде в сердце", price: 3890, category: "Клубника в шоколаде", desc: "Романтичный подарок для любимых", img: "image_3.png" },
+      { id: 17, name: "Премиум ассорти", price: 3990, category: "Клубника в шоколаде", desc: "Клубника с орехами и декором", img: "image_2.png" },
+      { id: 18, name: "Клубника с топпингом", price: 3290, category: "Клубника в шоколаде", desc: "Клубника с кокосовой стружкой, орехами и декором", img: "image_3.png" },
+
+      // ИГРУШКИ
+      { id: 19, name: "Плюшевый мишка", price: 2190, category: "Игрушки", desc: "Классический мишка для особенных моментов", img: "image_2.png" },
+      { id: 20, name: "Мишка бежевый", price: 2390, category: "Игрушки", desc: "Мягкий мишка для самых любимых", img: "image_3.png" },
+      { id: 21, name: "Белый мишка", price: 2490, category: "Игрушки", desc: "Нежный белый мишка с розовым бантом", img: "image_2.png" },
+      { id: 22, name: "Мишка серый", price: 2590, category: "Игрушки", desc: "Стильный серый мишка премиум качества", img: "image_3.png" },
+      { id: 23, name: "Мишка с сердцем", price: 2290, category: "Игрушки", desc: "Мишка с сердцем «I Love You»", img: "image_2.png" },
+      { id: 24, name: "Плюшевый зайка", price: 1990, category: "Игрушки", desc: "Нежный зайка для любимых", img: "image_3.png" }
+    ];
+
+    const state = {
+      cart: JSON.parse(localStorage.getItem("luxe_cart")) || [],
+      favs: JSON.parse(localStorage.getItem("luxe_favs")) || []
+    };
+
+    function saveState() {
+      localStorage.setItem("luxe_cart", JSON.stringify(state.cart));
+      localStorage.setItem("luxe_favs", JSON.stringify(state.favs));
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderAllGrids();
+      updateCounters();
+    });
+
+    // РЕНДЕР КАРТОЧЕК ПО СЕКЦИЯМ
+    function renderAllGrids() {
+      renderCategoryGrid("Букеты", "grid-bouquets");
+      renderCategoryGrid("Клубника в шоколаде", "grid-strawberries");
+      renderCategoryGrid("Игрушки", "grid-toys");
+    }
+
+    function renderCategoryGrid(categoryName, gridId) {
+      const grid = document.getElementById(gridId);
+      if(!grid) return;
+      grid.innerHTML = "";
+
+      const filtered = window.PRODUCTS.filter(p => p.category === categoryName);
+
+      filtered.forEach(p => {
+        const isFav = state.favs.includes(p.id);
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          ${p.badge ? `<span class="card-badge">${p.badge}</span>` : ""}
+          <button class="card-fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(${p.id})">❤️</button>
+          <div class="card-img-wrap">
+            <img src="${p.img}" onerror="this.src='https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=400&q=80'">
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">${p.name}</h3>
+            <p class="card-desc">${p.desc || ''}</p>
+            <div class="card-footer">
+              <span class="card-price">${p.price.toLocaleString()} ₽</span>
+              <button class="card-buy-btn" onclick="addToCart(${p.id})">🛒</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // КОРЗИНА И ИЗБРАННОЕ LOGIC
+    function addToCart(id) {
+      const exist = state.cart.find(c => c.id === id);
+      if(exist) { exist.count++; } else { state.cart.push({id, count: 1}); }
+      saveState(); updateCounters(); openDrawer("cartDrawer");
+    }
+
+    function changeQty(id, delta) {
+      const exist = state.cart.find(c => c.id === id);
+      if(!exist) return;
+      exist.count += delta;
+      if(exist.count <= 0) state.cart = state.cart.filter(c => c.id !== id);
+      saveState(); updateCounters(); renderCartDrawer();
+    }
+
+    function toggleFav(id) {
+      if(state.favs.includes(id)) { state.favs = state.favs.filter(f => f !== id); }
+      else { state.favs.push(id); }
+      saveState(); updateCounters(); renderAllGrids();
+    }
+
+    function updateCounters() {
+      document.getElementById("cartCount").textContent = state.cart.reduce((s,i)=>s+i.count, 0);
+      document.getElementById("favCount").textContent = state.favs.length;
+    }
+
+    // УПРАВЛЕНИЕ ОКНАМИ ДРАВЕРОВ
+    function openDrawer(id) {
+      closeDrawers();
+      document.getElementById("backdrop").classList.add("open");
+      document.getElementById(id).classList.add("open");
+      if(id === "cartDrawer") renderCartDrawer();
+      if(id === "favDrawer") renderFavDrawer();
+    }
+
+    function closeDrawers() {
+      document.getElementById("backdrop").classList.remove("open");
+      document.getElementById("cartDrawer").classList.remove("open");
+      document.getElementById("favDrawer").classList.remove("open");
+    }
+
+    document.getElementById("cartToggle").addEventListener("click", () => openDrawer("cartDrawer"));
+    document.getElementById("favToggle").addEventListener("click", () => openDrawer("favDrawer"));
+    document.getElementById("backdrop").addEventListener("click", closeDrawers);
+
+    function renderCartDrawer() {
+      const cont = document.getElementById("cartContent");
+      cont.innerHTML = "";
+      let total = 0;
+
+      if(state.cart.length === 0) {
+        cont.innerHTML = `<div class="empty-msg">Корзина пуста. Добавьте товары из каталога!</div>`;
+        document.getElementById("cartTotal").textContent = "0 ₽";
+        return;
+      }
+
+      state.cart.forEach(c => {
+        const p = window.PRODUCTS.find(item => item.id === c.id);
+        if(!p) return;
+        total += p.price * c.count;
+        const row = document.createElement("div");
+        row.className = "cart-item";
+        row.innerHTML = `
+          <div class="cart-item-info">
+            <div class="cart-item-title">${p.name}</div>
+            <div class="cart-item-price">${(p.price * c.count).toLocaleString()} ₽</div>
+            <div class="qty-box">
+              <button class="qty-btn" onclick="changeQty(${p.id}, -1)">-</button>
+              <span>${c.count}</span>
+              <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+            </div>
+          </div>
+          <button class="item-del" onclick="changeQty(${p.id}, -${c.count})">Удалить</button>
+        `;
+        cont.appendChild(row);
+      });
+      document.getElementById("cartTotal").textContent = total.toLocaleString() + " ₽";
+    }
+
+    function renderFavDrawer() {
+      const cont = document.getElementById("favContent");
+      cont.innerHTML = "";
+      if(state.favs.length === 0) {
+        cont.innerHTML = `<div class="empty-msg">В списке избранного пока ничего нет.</div>`;
+        return;
+      }
+      state.favs.forEach(fid => {
+        const p = window.PRODUCTS.find(item => item.id === fid);
+        if(!p) return;
+        const row = document.createElement("div");
+        row.className = "cart-item";
+        row.innerHTML = `
+          <div class="cart-item-info">
+            <div class="cart-item-title">${p.name}</div>
+            <div class="cart-item-price">${p.price.toLocaleString()} ₽</div>
+          </div>
+          <button class="qty-btn" style="width:auto; padding:2px 8px; font-size:11px;" onclick="addToCart(${p.id})">+ Купить</button>
+        `;
+        cont.appendChild(row);
+      });
+    }
+
+    // ОТПРАВКА ЗАКАЗА В WHATSAPP
+    function sendWhatsApp() {
+      if(state.cart.length === 0) return alert("Добавьте товары в корзину!");
+      const city = document.getElementById("citySelect").value;
+      let text = `✨ *Новый заказ из Магии Цветов (Luxe)*\n📍 *Город доставки:* ${city}\n\n📋 *Товары:*\n`;
+      let total = 0;
+      
+      state.cart.forEach(c => {
+        const p = window.PRODUCTS.find(item => item.id === c.id);
+        if(p) {
+          text += `• ${p.name} (${c.count} шт.) — ${(p.price*c.count).toLocaleString()} ₽\n`;
+          total += p.price * c.count;
+        }
+      });
+      text += `\n💰 *Итоговая сумма:* ${total.toLocaleString()} ₽`;
+      window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(text)}`, "_blank");
+    }
+
+    // ==========================================
+    // ЛОГИКА СИСТЕМЫ УПРАВЛЕНИЯ (АДМИНКА)
+    // ==========================================
+    function toggleAdminPanel() {
+      const m = document.getElementById("adminModal");
+      if(m.style.display === "none" || !m.style.display) {
+        m.style.display = "flex"; renderAdminList();
+      } else { m.style.display = "none"; }
+    }
+
+    function renderAdminList() {
+      const list = document.getElementById("adminProductsList");
+      list.innerHTML = "";
+      window.PRODUCTS.forEach((p, idx) => {
+        const d = document.createElement("div");
+        d.style = "display:flex; justify-content:between; font-size:12px; border-bottom:1px solid #eee; padding:5px 0; align-items:center;";
+        d.innerHTML = `
+          <span style="flex-grow:1;">[${p.category}] <b>${p.name}</b> — ${p.price} ₽</span>
+          <button onclick="deleteAdminProduct(${idx})" style="background:#dc3545; color:white; border:none; padding:2px 6px; border-radius:4px; cursor:pointer;">×</button>
+        `;
+        list.appendChild(d);
+      });
+    }
+
+    function addAdminProduct() {
+      const name = document.getElementById("adm-name").value.trim();
+      const price = parseInt(document.getElementById("adm-price").value) || 0;
+      const category = document.getElementById("adm-category").value;
+      const badge = document.getElementById("adm-badge").value.trim();
+      const img = document.getElementById("adm-image").value.trim() || "image_2.png";
+
+      if(!name || !price) return alert("Введите название и цену букета!");
+
+      const newId = window.PRODUCTS.length ? Math.max(...window.PRODUCTS.map(p=>p.id)) + 1 : 1;
+      window.PRODUCTS.unshift({ id: newId, name, price, category, badge, img, desc: "Премиальный букет из каталога" });
+
+      document.getElementById("adm-name").value = "";
+      document.getElementById("adm-price").value = "";
+      document.getElementById("adm-badge").value = "";
+
+      renderAdminList(); renderAllGrids();
+      alert("Товар добавлен на экран витрины! Теперь сгенерируйте код для постоянного сохранения.");
+    }
+
+    function deleteAdminProduct(idx) {
+      if(confirm("Удалить этот товар с сайта?")) {
+        window.PRODUCTS.splice(idx, 1);
+        renderAdminList(); renderAllGrids();
+      }
+    }
+
+    function generateAdminCode() {
+      const area = document.getElementById("adm-code-output");
+      area.style.display = "block";
+      area.value = "window.PRODUCTS = " + JSON.stringify(window.PRODUCTS, null, 2) + ";";
+      area.select();
+      document.execCommand("copy");
+      alert("Код витрины скопирован в буфер обмена! Замените им массив window.PRODUCTS в коде файла на GitHub.");
+    }
+  </script>
+</body>
+</html>
