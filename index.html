@@ -1,0 +1,225 @@
+// Данные для категорий товаров
+const productsData = {
+    bouquets: [
+        { id: 1, name: "Букет из пионов", description: "Пышные пионы в стильной упаковке", price: 5890, image: "bouquet_1.jpg" },
+        { id: 2, name: "Белые розы 31 шт", description: "Элегантный букет из белых роз", price: 4990, image: "bouquet_2.jpg" },
+        { id: 3, name: "Розовый микс", description: "Смесь нежных розовых и пудровых роз", price: 4790, image: "bouquet_3.jpg" },
+        { id: 4, name: "Букет из 51 розы", description: "Классический букет из красных роз", price: 6890, image: "bouquet_4.jpg" },
+        { id: 5, name: "Нежный букет", description: "Воздушный бело-розовый букет для особого случая", price: 3590, image: "bouquet_5.jpg" },
+        { id: 6, name: "Букет «Мечта»", description: "Белый и розовый микс в розовых тонах", price: 4490, image: "bouquet_6.jpg" },
+        { id: 7, name: "Сиреневый рай", description: "Изящный букет из сиреневых и лавандовых ранункулюсов", price: 4190, image: "bouquet_7.jpg" },
+        { id: 8, name: "Розовые пионы", description: "Нежные розовые пионы в крафте", price: 5290, image: "bouquet_8.jpg" },
+        { id: 9, name: "Небесный микс", description: "Голубые гортензии и розы в стильной упаковке", price: 5890, image: "bouquet_9.jpg" },
+        { id: 10, name: "Пионы и розы", description: "Пионы и нежные голубые розы в эксклюзивной упаковке", price: 6290, image: "bouquet_10.jpg" },
+        { id: 11, name: "Букет «Уют»", description: "Нежная композиция из разноцветных роз", price: 3290, image: "bouquet_11.jpg" },
+        { id: 12, name: "Вечерний блюз", description: "Элегантный микс из холодных оттенков", price: 4890, image: "bouquet_12.jpg" }
+    ],
+    strawberry: [
+        { id: 101, name: "Клубника в молочном шоколаде", description: "Свежая клубника в бельгийском шоколаде", price: 2990, image: "chocolate_1.jpg" },
+        { id: 102, name: "Клубника в белом шоколаде", description: "Нежная клубника в белом шоколаде", price: 2990, image: "chocolate_2.jpg" },
+        { id: 103, name: "Ассорти клубники", description: "Микс из молочного, белого и темного шоколада", price: 3490, image: "chocolate_3.jpg" },
+        { id: 104, name: "Клубника в шоколаде «Сердце»", description: "Романтичный подарок в форме сердца", price: 3890, image: "chocolate_4.jpg" },
+        { id: 105, name: "Пьяная клубника", description: "Клубника с орехами в шоколаде", price: 3990, image: "chocolate_5.jpg" },
+        { id: 106, name: "Клубника с топпингом", description: "Клубника с кокосовой стружкой, орехами и шоколадом", price: 3290, image: "chocolate_6.jpg" }
+    ],
+    toys: [
+        { id: 201, name: "Плюшевый мишка", description: "Классический мишка с атласным бантом для особых моментов", price: 2190, image: "toy_1.jpg" },
+        { id: 202, name: "Мишка бежевый", description: "Милый мишка для самых любимых", price: 2390, image: "toy_2.jpg" },
+        { id: 203, name: "Белый мишка", description: "Нежный мишка с атласным бантом", price: 2490, image: "toy_3.jpg" },
+        { id: 204, name: "Мишка серый", description: "Стильный серый мишка с любовным посланием", price: 2290, image: "toy_4.jpg" },
+        { id: 205, name: "Мишка с сердцем", description: "Мишка с сердцем, на котором написано \"I Love You\"", price: 2990, image: "toy_5.jpg" },
+        { id: 206, name: "Плюшевый зайка", description: "Нежный зайка для ваших любимых", price: 1990, image: "toy_6.jpg" }
+    ],
+    balloons: [ // Пока пустой, потом можно добавить
+        { id: 301, name: "Воздушный шар «Сердце»", description: "Красный шар в форме сердца", price: 500, image: "balloon_1.jpg" }
+    ],
+    cards: [ // Пока пустой, потом можно добавить
+        { id: 401, name: "Открытка «С Любовью»", description: "Яркая открытка с теплыми пожеланиями", price: 150, image: "card_1.jpg" }
+    ]
+};
+
+// Данные об отзывах
+const reviewsData = [
+    { id: 1, author: "Анна С.", text: "Очень красивые и свежие цветы! Доставка быстрая.", rating: 5 },
+    { id: 2, author: "Дмитрий П.", text: "Клубника была восхитительной, шоколад нежный.", rating: 5 },
+    { id: 3, author: "Елена В.", text: "Игрушка полностью соответствует описанию, ребенку очень понравилось.", rating: 4 }
+];
+
+// Корзина
+let cart = [];
+let isCartVisible = false; // Статус видимости корзины
+
+// Функция для отображения товаров в категории
+function displayProducts(category) {
+    const productsContainer = document.getElementById(category);
+    if (!productsContainer) return;
+    productsContainer.innerHTML = ''; // Очищаем предыдущее содержимое
+
+    const items = productsData[category] || [];
+    items.forEach(item => {
+        const productCard = document.createElement('div');
+        productCard.classList.add('product-card');
+        productCard.innerHTML = `
+            <img src="static/${item.image}" alt="${item.name}">
+            <h3>${item.name}</h3>
+            <p class="description">${item.description}</p>
+            <p class="price">${item.price} ₽</p>
+            <button onclick="addToCart(${item.id}, '${category}')">В корзину</button>
+        `;
+        productsContainer.appendChild(productCard);
+    });
+}
+
+// Функция для отображения всех категорий
+function showAllSections() {
+    for (const category in productsData) {
+        showSection(category);
+    }
+}
+
+// Функция для показа определенной секции
+function showSection(category) {
+    // Скрываем все секции каталога
+    document.querySelectorAll('#catalog > h2, .products').forEach(el => {
+        el.style.display = 'none';
+    });
+    document.querySelectorAll('section:has(div.products)').forEach(sec => { // Находим секции с .products
+        sec.style.display = 'none';
+    });
+
+    // Показываем заголовок и товары для выбранной категории
+    const sectionTitle = document.querySelector(`nav button[onclick*="'${category}'"]`).innerText.split(' ')[0]; // Получаем эмодзи + название
+    const currentSection = document.querySelector(`section:has(div#${category})`); // Находим секцию по ID div'а
+    if (currentSection) {
+        currentSection.style.display = 'block';
+        const title = currentSection.querySelector('h2');
+        if (title) {
+             title.innerText = `${sectionTitle} ${productsData[category][0] ? productsData[category][0].name.match(/^[🌹🍓🧸🎈💌]/i) : ''} ${productsData[category][0] ? productsData[category][0].name.split(' ')[0] : sectionTitle}`;
+        }
+
+        // Если товары еще не загружены, загружаем их
+        if (document.getElementById(category).innerHTML === '') {
+            displayProducts(category);
+        }
+    } else {
+        // Обработка случая, если секция не найдена (например, для "шаров" и "открыток", если их нет в HTML)
+        console.warn(`Секция для категории "${category}" не найдена.`);
+    }
+
+     // Скрываем корзину, если была открыта
+    if (isCartVisible) {
+        toggleCart();
+    }
+}
+
+
+// Функция для прокрутки к каталогу
+function scrollToCatalog() {
+    document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Функция добавления товара в корзину
+function addToCart(productId, category) {
+    const item = productsData[category].find(p => p.id === productId);
+    if (!item) return;
+
+    const existingItem = cart.find(cartItem => cartItem.id === productId && cartItem.category === category);
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push({ ...item, quantity: 1 });
+    }
+    updateCartDisplay();
+}
+
+// Функция обновления отображения корзины
+function updateCartDisplay() {
+    const cartItemsContainer = document.getElementById('cartItems');
+    cartItemsContainer.innerHTML = '';
+    let total = 0;
+
+    cart.forEach(item => {
+        const cartItemElement = document.createElement('div');
+        cartItemElement.classList.add('cart-item');
+        cartItemElement.innerHTML = `
+            <img src="static/${item.image}" alt="${item.name}" width="50">
+            <div>
+                <p>${item.name}</p>
+                <p>${item.price} ₽ x ${item.quantity}</p>
+            </div>
+            <button onclick="removeFromCart(${item.id}, '${item.category}')">Удалить</button>
+        `;
+        cartItemsContainer.appendChild(cartItemElement);
+        total += item.price * item.quantity;
+    });
+
+    document.getElementById('total').innerText = `${total} ₽`;
+}
+
+// Функция удаления товара из корзины
+function removeFromCart(productId, category) {
+    cart = cart.filter(item => !(item.id === productId && item.category === category));
+    updateCartDisplay();
+}
+
+// Функция переключения видимости корзины
+function toggleCart() {
+    const cartElement = document.getElementById('cart');
+    isCartVisible = !isCartVisible;
+    cartElement.style.right = isCartVisible ? '0' : '-400px'; // Анимированное появление/исчезновение
+}
+
+// Функция отправки заказа в WhatsApp
+function orderWhatsApp() {
+    if (cart.length === 0) {
+        alert("Ваша корзина пуста!");
+        return;
+    }
+
+    let message = "Здравствуйте! Я хотел бы заказать:\n";
+    cart.forEach(item => {
+        message += `- ${item.name} (x${item.quantity}) - ${item.price * item.quantity} ₽\n`;
+    });
+    const totalAmount = document.getElementById('total').innerText;
+    message += `\nИтого: ${totalAmount}`;
+
+    const phoneNumber = "+79280126881"; // Ваш номер WhatsApp
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+}
+
+// Функция для отображения отзывов
+function displayReviews() {
+    const reviewsContainer = document.getElementById('reviews');
+    reviewsContainer.innerHTML = '';
+    reviewsData.forEach(review => {
+        const reviewElement = document.createElement('div');
+        reviewElement.classList.add('review');
+        reviewElement.innerHTML = `
+            <h4>${review.author}</h4>
+            <p>${review.text}</p>
+            <div class="rating">⭐ ${review.rating}</div>
+        `;
+        reviewsContainer.appendChild(reviewElement);
+    });
+}
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    showInitialSection(); // Показываем первую секцию (букеты)
+    displayReviews();
+});
+
+// Функция для определения, какую секцию показать первой (например, букеты)
+function showInitialSection() {
+    // По умолчанию показываем букеты
+    showSection('bouquets');
+}
+
+// Пока нет реализации для админки, блокируем её
+document.getElementById('adminPanel').style.display = 'none';
+
+// Здесь мог бы быть код для админки, если бы он был реализован
+// function loginAdmin() { ... }
+// function addProductAdmin() { ... }
+// function deleteProductAdmin() { ... }
